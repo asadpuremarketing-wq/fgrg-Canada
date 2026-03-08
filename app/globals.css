@@ -1,26 +1,306 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --brand-primary: #0F172A;
+  /* Deep Navy to match UK header/footer */
+  --brand-primary-dark: #020617;
+  --brand-accent: #19AFAF;
+  /* FGRF UK Teal */
+  --brand-accent-soft: #E0F7FA;
+  --surface-neutral: #f8fafc;
+  --surface-soft-blue: #f0f9ff;
+  --text-strong: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --radius-button: 0.5rem;
+  /* Slightly sharper like UK */
+  --radius-card: 1rem;
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 4px 6px -1px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.10);
+  --shadow-glow-blue: 0 4px 14px rgba(15, 23, 42, 0.20);
+  --shadow-glow-green: 0 4px 14px rgba(25, 175, 175, 0.25);
+  --motion-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-med: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: "Inter", "Roboto", system-ui, sans-serif;
+  /* Matched UK simple sans */
+  --font-display: "Montserrat", "Inter", sans-serif;
+  /* UK headings look geometric */
+  --color-fgrf-teal: #19AFAF;
+  --color-fgrf-navy: #0F172A;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: white;
+  color: var(--text-strong);
+  font-family: var(--font-sans);
+}
+
+h1 {
+  font-size: clamp(2.25rem, 1.8rem + 2vw, 4rem);
+  line-height: 1.1;
+  font-weight: 700;
+  /* Slightly less heavy than 800 */
+  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 1.4rem + 1vw, 2.5rem);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  color: var(--brand-primary);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.75rem);
+  line-height: 1.3;
+  font-weight: 600;
+  font-family: var(--font-display);
+}
+
+p {
+  font-size: 1.05rem;
+  /* Slightly larger body text like UK */
+  line-height: 1.7;
+  color: var(--text-body);
+  max-width: 70ch;
+}
+
+ul,
+ol {
+  color: var(--text-body);
+  line-height: 1.7;
+}
+
+li+li {
+  margin-top: 0.4rem;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px white, 0 0 0 6px var(--brand-accent);
+  border-radius: 0.25rem;
+}
+
+/* ── Section shells ───────────────────────────────────── */
+.section-shell {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.section-tone-white {
+  background: #ffffff;
+}
+
+.section-tone-neutral {
+  background: var(--surface-neutral);
+}
+
+.section-tone-blue {
+  background: var(--surface-soft-blue);
+}
+
+/* ── Surface cards ────────────────────────────────────── */
+.surface-card {
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-card);
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--motion-fast);
+}
+
+.surface-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-accent);
+}
+
+.surface-card:active {
+  transform: translateY(-1px);
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border-radius: 4px;
+  /* Boxier buttons like UK site */
+  padding: 0.875rem 2rem;
+  border: none;
+  background: var(--brand-accent);
+  /* Solid Teal */
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: all var(--motion-fast);
+}
+
+.btn-primary:hover {
+  background: #138f8f;
+  /* Darker teal */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(25, 175, 175, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border-radius: 4px;
+  padding: 0.875rem 2rem;
+  border: 2px solid var(--brand-primary);
+  background: transparent;
+  color: var(--brand-primary);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: all var(--motion-fast);
+}
+
+.btn-secondary:hover {
+  background: var(--brand-primary);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+.btn-tertiary {
+  color: var(--brand-accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--motion-fast);
+}
+
+.btn-tertiary:hover {
+  color: #138f8f;
+  border-bottom-color: #138f8f;
+}
+
+/* ── Badge / pill ─────────────────────────────────────── */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  border-radius: 9999px;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-pill-blue {
+  background: #eff6ff;
+  color: var(--brand-primary);
+  border: 1px solid #dbeafe;
+}
+
+.badge-pill-green {
+  background: #f0fdf4;
+  color: var(--brand-accent);
+  border: 1px solid #dcfce7;
+}
+
+/* ── Icon circle ──────────────────────────────────────── */
+.icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  background: var(--surface-soft-blue);
+  color: var(--brand-accent);
+}
+
+.icon-circle-blue {
+  background: #eff6ff;
+  color: var(--brand-primary);
+}
+
+.icon-circle-green {
+  background: #e0faff;
+  color: var(--brand-accent);
+}
+
+.icon-circle-sky {
+  background: #f0f9ff;
+  color: #0ea5e9;
+}
+
+.icon-circle-amber {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.icon-circle-rose {
+  background: #fff1f2;
+  color: #e11d48;
+}
+
+/* ── Stat number ──────────────────────────────────────── */
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 2rem + 2vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--brand-accent);
+}
+
+/* ── Accent card bar ──────────────────────────────────── */
+.card-accent-bar {
+  height: 5px;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  margin: -1px -1px 0;
+}
+
+.card-accent-bar-blue {
+  background: var(--brand-primary);
+}
+
+.card-accent-bar-green {
+  background: var(--brand-accent);
+}
+
+.card-accent-bar-teal {
+  background: var(--brand-accent);
+}
+
+/* ── Summary detail ───────────────────────────────────── */
+summary {
+  transition: color var(--motion-fast);
+  cursor: pointer;
+}
+
+summary:hover {
+  color: var(--brand-primary);
 }

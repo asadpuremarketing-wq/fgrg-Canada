@@ -1,0 +1,16 @@
+<svg width="1400" height="900" viewBox="0 0 1400 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="communityBg" x1="0" y1="0" x2="1400" y2="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EDF4FF"/>
+      <stop offset="1" stop-color="#F5FBF8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="900" fill="url(#communityBg)"/>
+  <circle cx="260" cy="220" r="170" fill="#D3E6FF" opacity="0.7"/>
+  <circle cx="1120" cy="260" r="210" fill="#DDF7EA" opacity="0.65"/>
+  <rect x="240" y="420" width="920" height="290" rx="42" fill="#FFFFFF" fill-opacity="0.78"/>
+  <path d="M305 650C410 548 550 500 700 500C850 500 990 548 1095 650" stroke="#8DB5E7" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="520" cy="575" r="26" fill="#7CA3DA"/>
+  <circle cx="700" cy="560" r="26" fill="#6E9BD8"/>
+  <circle cx="880" cy="575" r="26" fill="#7CA3DA"/>
+</svg>

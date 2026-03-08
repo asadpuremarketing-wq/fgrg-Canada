@@ -1,0 +1,13 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heroBg" x1="0" y1="0" x2="1600" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EAF3FF"/>
+      <stop offset="1" stop-color="#EFFBF6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#heroBg)"/>
+  <circle cx="290" cy="180" r="210" fill="#CFE4FF" opacity="0.55"/>
+  <circle cx="1330" cy="220" r="250" fill="#D8F6E8" opacity="0.52"/>
+  <path d="M0 705C190 650 375 670 560 730C730 785 900 810 1100 760C1270 718 1430 640 1600 620V1000H0V705Z" fill="#DCE8FA"/>
+  <path d="M0 790C220 755 420 790 650 860C860 920 1060 930 1270 865C1395 826 1495 765 1600 725V1000H0V790Z" fill="#E8F6EF"/>
+</svg>

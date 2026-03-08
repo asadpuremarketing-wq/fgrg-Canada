@@ -1,65 +1,124 @@
+import { pageMetadata } from "@/lib/metadata";
+import { JsonLd } from "@/components/json-ld";
+import { pagesContent } from "@/content/pages";
+import { siteConfig } from "@/lib/site";
+import type { Metadata } from "next";
+import Link from "next/link";
 import Image from "next/image";
+import { VideoHero } from "@/components/video-hero";
+import { HighlightTiles } from "@/components/highlight-tiles";
+import { ProgramCards } from "@/components/program-cards";
+import { Milestones } from "@/components/milestones";
+import { FocusTabs } from "@/components/focus-tabs";
 
-export default function Home() {
+export const metadata: Metadata = pageMetadata({
+  title: "Homepage",
+  description: pagesContent.home.hero.body,
+  path: "/",
+});
+
+export default function HomePage() {
+  const home = pagesContent.home;
+  const focusTabItems = [
+    { title: home.whoWeAre.heading, body: home.whoWeAre.body[0] },
+    { title: home.focusAreas[0]?.heading ?? "", body: home.focusAreas[0]?.body[0] ?? "" },
+    { title: home.focusAreas[1]?.heading ?? "", body: home.focusAreas[1]?.body[0] ?? "" },
+    { title: home.transparency.heading, body: home.transparency.body[0] },
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="space-y-16 pb-8">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Faizan Global Relief Foundation Canada",
+          url: siteConfig.siteUrl,
+          email: "info@fgrfcanada.ca",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "1202 Dunsmure Road, Hamilton, Ontario",
+            addressCountry: "CA",
+          },
+        }}
+      />
+
+      <VideoHero
+        eyebrow={home.hero.eyebrow}
+        title={home.hero.title}
+        description={home.hero.body}
+        primaryCta={{ label: "Donate", href: "/donate" }}
+        secondaryCta={{ label: "Learn More", href: "/about" }}
+        videoSrc={home.hero.videoSrc}
+        videoPoster={home.hero.videoPoster}
+      />
+
+      <HighlightTiles items={home.highlightTiles} />
+
+      <ProgramCards
+        title={home.programsShowcase.title}
+        intro={home.programsShowcase.intro}
+        cards={home.programsShowcase.cards}
+      />
+
+      <section className="section-tone-white grid items-center gap-6 rounded-3xl border border-slate-200 p-6 shadow-[var(--shadow-sm)] md:grid-cols-2 md:p-8">
+        <div className="space-y-4">
+          <h2>{home.introduction.title}</h2>
+          <p className="max-w-xl text-slate-700">{home.introduction.intro}</p>
+          <h3>{home.whoWeAre.heading}</h3>
+          {home.whoWeAre.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+          <Link href={home.introduction.ctaHref} className="btn-secondary mt-2">
+            {home.introduction.ctaLabel}
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        <div className="overflow-hidden rounded-2xl border border-slate-200">
+          <Image
+            src="/images/community-1.svg"
+            alt="Abstract community themed background in neutral colors"
+            width={1200}
+            height={800}
+            className="h-full w-full object-cover"
+          />
+        </div>
+      </section>
+
+      <Milestones
+        title={home.milestones.title}
+        intro={home.milestones.intro}
+        items={home.milestones.items}
+      />
+
+      <FocusTabs title={home.focusTabs.title} intro={home.focusTabs.intro} items={focusTabItems} />
+
+      <section className="section-tone-blue overflow-hidden rounded-3xl border border-slate-200 shadow-[var(--shadow-md)]">
+        <div className="grid gap-0 md:grid-cols-[1.35fr_1fr]">
+          <div className="space-y-4 bg-gradient-to-r from-blue-50 via-white to-emerald-50/30 p-8 md:p-10">
+            <h2>{home.governanceCallout.title}</h2>
+            <p className="max-w-2xl text-slate-700">
+              Governance information is structured for clarity and published as documents become
+              available.
+            </p>
+            <p>{home.governanceCallout.body}</p>
+            <p>{home.transparency.body[0]}</p>
+            <div className="pt-1">
+              <Link href={home.governanceCallout.buttonHref} className="btn-primary">
+                {home.governanceCallout.buttonLabel}
+              </Link>
+            </div>
+          </div>
+          <div className="min-h-[220px] border-t border-slate-200 md:border-l md:border-t-0">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src="/og.jpg"
+              alt="FGRF Canada relief work photo"
+              width={1000}
+              height={800}
+              className="h-full w-full object-cover"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }

@@ -1,0 +1,16 @@
+<svg width="1400" height="900" viewBox="0 0 1400 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="govBg" x1="0" y1="0" x2="1400" y2="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EFF5FF"/>
+      <stop offset="1" stop-color="#EEF8FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="900" fill="url(#govBg)"/>
+  <circle cx="260" cy="190" r="180" fill="#DDE9FF" opacity="0.66"/>
+  <circle cx="1170" cy="180" r="200" fill="#DBEEF8" opacity="0.65"/>
+  <rect x="210" y="260" width="980" height="470" rx="34" fill="#FFFFFF" fill-opacity="0.83"/>
+  <rect x="305" y="355" width="790" height="26" rx="13" fill="#98B7E5"/>
+  <rect x="305" y="425" width="790" height="26" rx="13" fill="#A7C3EA"/>
+  <rect x="305" y="495" width="640" height="26" rx="13" fill="#B3CEF0"/>
+  <rect x="305" y="565" width="460" height="26" rx="13" fill="#C2D9F4"/>
+</svg>
