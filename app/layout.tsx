@@ -93,6 +93,11 @@ export const metadata: Metadata = {
     },
   },
 
+  // ── Verification ──────────────────────────────────────────────────────────
+  verification: {
+    google: "vkKzOrZ0qJqw5_95OWkonoBnsqcyfiHTQ5WX-8ab9JM",
+  },
+
   // ── Icons ─────────────────────────────────────────────────────────────────
   icons: {
     icon:    [
