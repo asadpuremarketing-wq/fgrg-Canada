@@ -19,9 +19,10 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
+  // Close mobile menu on route change — this is an intentional
+  // synchronisation of UI state with the Next.js router.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setIsMenuOpen(false); }, [pathname]);
 
   const isActive = (href: string) => pathname === href;
   const navLinks = navItems.filter((i) => i.href !== "/donate");

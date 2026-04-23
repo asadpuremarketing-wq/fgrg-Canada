@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useSyncExternalStore, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 type VideoHeroProps = {
@@ -15,6 +15,18 @@ type VideoHeroProps = {
   videoPoster: string;
 };
 
+function useReducedMotion() {
+  const subscribe = useCallback((cb: () => void) => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    mq.addEventListener("change", cb);
+    return () => mq.removeEventListener("change", cb);
+  }, []);
+  const getSnapshot = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const getServerSnapshot = () => false;
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
+
 export function VideoHero({
   eyebrow,
   title,
@@ -25,16 +37,8 @@ export function VideoHero({
   videoPoster,
 }: VideoHeroProps) {
   const [videoLoaded, setVideoLoaded] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const reducedMotion = useReducedMotion();
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
