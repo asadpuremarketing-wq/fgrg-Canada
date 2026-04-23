@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -72,7 +72,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                                         href="/about"
                                         className="rounded-lg border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white hover:bg-white/10"
                                     >
-                                        Learn More <span aria-hidden="true">→</span>
+                                        Learn More <span aria-hidden="true">{">"}</span>
                                     </Link>
                                 </div>
                             </div>

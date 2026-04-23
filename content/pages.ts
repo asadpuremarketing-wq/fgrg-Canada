@@ -1,4 +1,4 @@
-import { warnIfContentHasBannedTerms } from "@/lib/compliance";
+﻿import { warnIfContentHasBannedTerms } from "@/lib/compliance";
 
 export type TextSection = {
   heading: string;
@@ -134,28 +134,28 @@ export const pagesContent: SitePagesContent = {
     hero: {
       eyebrow: "Canadian Charitable Organization",
       title: "Serving Canadian Communities with Integrity and Compassion",
-      body: "FGRF Canada is dedicated to poverty relief, education, and community support across Canada—from food drives and Sunday schools to senior programs and emergency relief.",
+      body: "FGRF Canada is dedicated to poverty relief, education, and community support across Canada - from food drives and Sunday schools to senior programs and emergency relief.",
       videoSrc: "/videos/hero-background.mp4",
-      videoPoster: "/og.jpg",
+      videoPoster: "/images/hero-cinematic.jpeg",
     },
     heroSlides: [
       {
         eyebrow: "Canadian Charitable Organization",
         title: "Serving Canadian Communities with Integrity and Compassion",
         body: "FGRF Canada is dedicated to poverty relief, education, and community support across Canada.",
-        imageSrc: "/og.jpg",
+        imageSrc: "/images/hero-cinematic.jpeg",
       },
       {
         eyebrow: "Food Security & Ramadan Services",
         title: "Supporting Families with Food Hampers & Iftars",
         body: "Providing food hampers, running food drives, and serving free Iftars during Ramadan to support families across Canada.",
-        imageSrc: "/og.jpg",
+        imageSrc: "/images/hero-cinematic.jpeg",
       },
       {
         eyebrow: "Education & Youth Empowerment",
         title: "Building Futures Through Sunday Schools",
         body: "Empowering the next generation through Sunday schools for children and learning sessions for adults.",
-        imageSrc: "/og.jpg",
+        imageSrc: "/images/hero-cinematic.jpeg",
       },
     ],
     whoWeAre: {
@@ -278,14 +278,14 @@ export const pagesContent: SitePagesContent = {
       title: "Community Impact Gallery",
       intro: "A visual record of FGRF Canada's community service and charitable activities across the country.",
       images: [
-        { src: "/images/community-1.svg", alt: "Community engagement activity" },
-        { src: "/og.jpg", alt: "FGRF Canada relief work" },
-        { src: "/images/hero-canada.svg", alt: "Canada-focused charitable mission" },
-        { src: "/images/governance-1.svg", alt: "Structured governance and transparency" },
-        { src: "/og.jpg", alt: "Food distribution program" },
-        { src: "/og.jpg", alt: "Youth educational workshop" },
-        { src: "/og.jpg", alt: "Senior social gathering" },
-        { src: "/og.jpg", alt: "Emergency response team" },
+        { src: "/images/gallery/volunteers-community.jpeg", alt: "Volunteers serving the community" },
+        { src: "/images/gallery/education-children.jpeg",   alt: "Youth education program" },
+        { src: "/images/gallery/education-class.jpeg",      alt: "Classroom learning session" },
+        { src: "/images/gallery/donation-giving.jpeg",      alt: "Charitable donation and giving" },
+        { src: "/images/gallery/mission-impact.jpeg",       alt: "Mission and community impact" },
+        { src: "/images/gallery/community-support.jpg",     alt: "Community support initiative" },
+        { src: "/images/gallery/board-meeting.jpg",         alt: "Board governance meeting" },
+        { src: "/images/gallery/hero-cinematic.jpeg",       alt: "FGRF Canada community outreach" },
       ],
     },
   },
@@ -475,7 +475,7 @@ export const pagesContent: SitePagesContent = {
       { label: "Donate via CanadaHelps", href: "/donate/canadahelps" },
     ],
     ifRegisteredBlock:
-      "FGRF Canada is a Registered Charity (BN: XXXXXXXX RR0001). Official tax receipts will be issued for eligible donations.",
+      "FGRF Canada is a Registered Charity. Official tax receipts will be issued for eligible donations.",
     ifPendingBlock:
       "Charitable registration is currently in process. Tax receipts will be issued once registration is approved by the Canada Revenue Agency.",
   },

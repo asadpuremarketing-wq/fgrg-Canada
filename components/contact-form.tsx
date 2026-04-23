@@ -1,6 +1,7 @@
-"use client";
+﻿"use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Send, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 type FormErrors = {
   name?: string;
@@ -8,192 +9,291 @@ type FormErrors = {
   message?: string;
 };
 
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 export function ContactForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [companyWebsite, setCompanyWebsite] = useState("");
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [status, setStatus] = useState<string>("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const nameInputRef = useRef<HTMLInputElement | null>(null);
-  const emailInputRef = useRef<HTMLInputElement | null>(null);
-  const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const [name, setName]               = useState("");
+  const [email, setEmail]             = useState("");
+  const [message, setMessage]         = useState("");
+  const [subject, setSubject]         = useState("");
+  const [companyWebsite, setCompanyWebsite] = useState(""); // honeypot
+  const [loadedAt]                    = useState(() => Date.now()); // timing token
+  const [errors, setErrors]           = useState<FormErrors>({});
+  const [status, setStatus]           = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+  const nameRef    = useRef<HTMLInputElement>(null);
+  const emailRef   = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
 
-  const validate = () => {
-    const nextErrors: FormErrors = {};
+  // Prevent form submission if JS is disabled (non-JS bots) - aria-live region
+  useEffect(() => {
+    const form = document.getElementById("contact-form");
+    if (form) form.setAttribute("data-js", "true");
+  }, []);
 
-    if (name.trim().length < 2) {
-      nextErrors.name = "Please enter your name.";
-    }
-    if (!emailPattern.test(email.trim())) {
-      nextErrors.email = "Please enter a valid email address.";
-    }
-    if (message.trim().length < 10) {
-      nextErrors.message = "Please enter a message with at least 10 characters.";
-    }
-
-    return nextErrors;
+  const validate = (): FormErrors => {
+    const e: FormErrors = {};
+    if (name.trim().length < 2)           e.name    = "Please enter your full name (at least 2 characters).";
+    if (!emailPattern.test(email.trim())) e.email   = "Please enter a valid email address.";
+    if (message.trim().length < 10)       e.message = "Message must be at least 10 characters.";
+    return e;
   };
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setStatus("");
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrorMessage("");
 
     const validationErrors = validate();
     setErrors(validationErrors);
-
     if (Object.keys(validationErrors).length > 0) {
-      if (validationErrors.name) {
-        nameInputRef.current?.focus();
-      } else if (validationErrors.email) {
-        emailInputRef.current?.focus();
-      } else if (validationErrors.message) {
-        messageInputRef.current?.focus();
-      }
+      if (validationErrors.name)         nameRef.current?.focus();
+      else if (validationErrors.email)   emailRef.current?.focus();
+      else if (validationErrors.message) messageRef.current?.focus();
       return;
     }
 
-    setIsSubmitting(true);
+    setStatus("submitting");
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          message: message.trim(),
-          companyWebsite: companyWebsite.trim(),
+          name:          name.trim(),
+          email:         email.trim().toLowerCase(),
+          message:       message.trim(),
+          subject:       subject.trim(),
+          companyWebsite: companyWebsite.trim(), // honeypot
+          _t:            String(loadedAt),        // timing token
         }),
       });
 
       const data = (await response.json()) as { message?: string; error?: string };
 
       if (!response.ok) {
-        setStatus(data.error ?? "Unable to submit at this time.");
+        setErrorMessage(data.error ?? "Unable to submit at this time. Please try again.");
+        setStatus("error");
         return;
       }
 
-      setStatus(data.message ?? "Thank you. Your message was received.");
-      setName("");
-      setEmail("");
-      setMessage("");
-      setCompanyWebsite("");
+      setStatus("success");
+      setName(""); setEmail(""); setMessage(""); setSubject(""); setCompanyWebsite("");
       setErrors({});
     } catch {
-      setStatus("Unable to submit at this time.");
-    } finally {
-      setIsSubmitting(false);
+      setErrorMessage("Connection error. Please check your network and try again.");
+      setStatus("error");
     }
   };
 
-  return (
-    <form onSubmit={onSubmit} noValidate className="surface-card space-y-4 p-6">
-      <h2>Contact Form</h2>
+  if (status === "success") {
+    return (
+      <div
+        className="flex flex-col items-center justify-center gap-5 rounded-3xl px-8 py-16 text-center"
+        style={{
+          background: "linear-gradient(160deg, #f0fafa 0%, #f8fcff 100%)",
+          border: "1px solid rgba(25,175,175,0.18)",
+        }}
+        role="status"
+        aria-live="polite"
+      >
+        <div
+          className="flex h-16 w-16 items-center justify-center rounded-full"
+          style={{ background: "rgba(25,175,175,0.12)" }}
+        >
+          <CheckCircle2 size={32} style={{ color: "#19AFAF" }} />
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold font-display" style={{ color: "#0e507b" }}>
+            Message Received
+          </h3>
+          <p className="text-slate-500 leading-relaxed">
+            Thank you for reaching out to FGRF Canada. We&apos;ll get back to you as soon as possible.
+          </p>
+        </div>
+        <button onClick={() => setStatus("idle")} className="btn-secondary mt-2">
+          Send another message
+        </button>
+      </div>
+    );
+  }
 
-      <div className="space-y-1">
-        <label htmlFor="contact-name" className="text-sm font-medium text-slate-800">
-          Name <span aria-hidden="true">*</span>
-          <span className="sr-only">required</span>
+  const isSubmitting = status === "submitting";
+
+  return (
+    <form
+      id="contact-form"
+      onSubmit={onSubmit}
+      noValidate
+      className="rounded-3xl p-7 space-y-5"
+      aria-label="Contact FGRF Canada"
+      style={{
+        background: "white",
+        border: "1px solid rgba(25,175,175,0.1)",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.05)",
+      }}
+    >
+      <h2 className="text-xl font-bold font-display" style={{ color: "#0e507b", fontSize: "1.35rem" }}>
+        Send Us a Message
+      </h2>
+
+      {/* Full Name */}
+      <div className="space-y-1.5">
+        <label htmlFor="contact-name" className="block text-sm font-semibold" style={{ color: "#374151" }}>
+          Full Name <span aria-hidden="true" style={{ color: "#19AFAF" }}>*</span>
         </label>
         <input
-          ref={nameInputRef}
+          ref={nameRef}
           id="contact-name"
           name="name"
           type="text"
           required
           aria-required="true"
+          autoComplete="name"
+          placeholder="Your full name"
+          maxLength={100}
           value={name}
-          onChange={(event) => setName(event.target.value)}
-          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900"
+          onChange={(e) => { setName(e.target.value); setErrors((p) => ({ ...p, name: undefined })); }}
+          className="form-input"
           aria-invalid={errors.name ? "true" : "false"}
-          aria-describedby={errors.name ? "contact-name-error" : undefined}
+          aria-describedby={errors.name ? "name-error" : undefined}
+          disabled={isSubmitting}
         />
-        {errors.name ? (
-          <p id="contact-name-error" role="alert" aria-live="polite" className="text-sm text-red-700">
-            {errors.name}
+        {errors.name && (
+          <p id="name-error" role="alert" className="flex items-center gap-1.5 text-xs font-medium" style={{ color: "#dc2626" }}>
+            <AlertCircle size={12} /> {errors.name}
           </p>
-        ) : null}
+        )}
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="contact-email" className="text-sm font-medium text-slate-800">
-          Email <span aria-hidden="true">*</span>
-          <span className="sr-only">required</span>
+      {/* Email */}
+      <div className="space-y-1.5">
+        <label htmlFor="contact-email" className="block text-sm font-semibold" style={{ color: "#374151" }}>
+          Email Address <span aria-hidden="true" style={{ color: "#19AFAF" }}>*</span>
         </label>
         <input
-          ref={emailInputRef}
+          ref={emailRef}
           id="contact-email"
           name="email"
           type="email"
           required
           aria-required="true"
+          autoComplete="email"
+          placeholder="your@email.com"
+          maxLength={254}
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900"
+          onChange={(e) => { setEmail(e.target.value); setErrors((p) => ({ ...p, email: undefined })); }}
+          className="form-input"
           aria-invalid={errors.email ? "true" : "false"}
-          aria-describedby={errors.email ? "contact-email-error" : undefined}
+          aria-describedby={errors.email ? "email-error" : undefined}
+          disabled={isSubmitting}
         />
-        {errors.email ? (
-          <p id="contact-email-error" role="alert" aria-live="polite" className="text-sm text-red-700">
-            {errors.email}
+        {errors.email && (
+          <p id="email-error" role="alert" className="flex items-center gap-1.5 text-xs font-medium" style={{ color: "#dc2626" }}>
+            <AlertCircle size={12} /> {errors.email}
           </p>
-        ) : null}
+        )}
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="contact-message" className="text-sm font-medium text-slate-800">
-          Message <span aria-hidden="true">*</span>
-          <span className="sr-only">required</span>
+      {/* Subject (optional) */}
+      <div className="space-y-1.5">
+        <label htmlFor="contact-subject" className="block text-sm font-semibold" style={{ color: "#374151" }}>
+          Subject <span className="text-xs font-normal" style={{ color: "#94a3b8" }}>(optional)</span>
+        </label>
+        <input
+          id="contact-subject"
+          name="subject"
+          type="text"
+          autoComplete="off"
+          placeholder="Briefly describe your inquiry"
+          maxLength={200}
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          className="form-input"
+          disabled={isSubmitting}
+        />
+      </div>
+
+      {/* Message */}
+      <div className="space-y-1.5">
+        <label htmlFor="contact-message" className="block text-sm font-semibold" style={{ color: "#374151" }}>
+          Message <span aria-hidden="true" style={{ color: "#19AFAF" }}>*</span>
         </label>
         <textarea
-          ref={messageInputRef}
+          ref={messageRef}
           id="contact-message"
           name="message"
           rows={5}
           required
           aria-required="true"
+          placeholder="How can we help you?"
+          maxLength={3000}
           value={message}
-          onChange={(event) => setMessage(event.target.value)}
-          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900"
+          onChange={(e) => { setMessage(e.target.value); setErrors((p) => ({ ...p, message: undefined })); }}
+          className="form-input resize-none"
           aria-invalid={errors.message ? "true" : "false"}
-          aria-describedby={errors.message ? "contact-message-error" : undefined}
+          aria-describedby={errors.message ? "message-error" : undefined}
+          disabled={isSubmitting}
         />
-        {errors.message ? (
-          <p id="contact-message-error" role="alert" aria-live="polite" className="text-sm text-red-700">
-            {errors.message}
-          </p>
-        ) : null}
+        <div className="flex justify-between items-center">
+          {errors.message ? (
+            <p id="message-error" role="alert" className="flex items-center gap-1.5 text-xs font-medium" style={{ color: "#dc2626" }}>
+              <AlertCircle size={12} /> {errors.message}
+            </p>
+          ) : <span />}
+          <span className="text-xs" style={{ color: message.length > 2700 ? "#f59e0b" : "#94a3b8" }}>
+            {message.length}/3000
+          </span>
+        </div>
       </div>
 
-      <div className="hidden">
-        <label htmlFor="contact-company-website">Company website</label>
+      {/* Honeypot - hidden from real users, filled by bots */}
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="contact-website">Website</label>
         <input
-          id="contact-company-website"
+          id="contact-website"
           name="companyWebsite"
           type="text"
           value={companyWebsite}
-          onChange={(event) => setCompanyWebsite(event.target.value)}
+          onChange={(e) => setCompanyWebsite(e.target.value)}
           autoComplete="off"
           tabIndex={-1}
         />
       </div>
 
+      {/* API error */}
+      {status === "error" && (
+        <div
+          className="flex items-start gap-3 rounded-xl p-4"
+          style={{ background: "#fef2f2", border: "1px solid #fecaca" }}
+          role="alert"
+          aria-live="assertive"
+        >
+          <AlertCircle size={16} className="shrink-0 mt-0.5" style={{ color: "#dc2626" }} />
+          <p className="text-sm" style={{ color: "#991b1b" }}>{errorMessage}</p>
+        </div>
+      )}
+
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-70"
+        className="btn-primary w-full justify-center gap-2.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-y-0"
+        aria-busy={isSubmitting}
       >
-        {isSubmitting ? "Sending..." : "Send message"}
+        {isSubmitting ? (
+          <>
+            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+            Sending&hellip;
+          </>
+        ) : (
+          <>
+            <Send size={16} aria-hidden="true" />
+            Send Message
+          </>
+        )}
       </button>
 
-      {status ? (
-        <p role="status" aria-live="polite" className="text-sm text-slate-700">
-          {status}
-        </p>
-      ) : null}
+      <p className="text-xs text-center" style={{ color: "#94a3b8" }}>
+        Your information is kept private and will only be used to respond to your inquiry.
+      </p>
     </form>
   );
 }

@@ -1,4 +1,9 @@
+"use client";
+
+import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowRight, Droplets, Heart, GraduationCap, Flame, HandHeart } from "lucide-react";
 
 type ProgramCard = {
   title: string;
@@ -13,53 +18,104 @@ type ProgramCardsProps = {
   cards: ProgramCard[];
 };
 
-const CARD_ACCENTS = [
-  { bar: "card-accent-bar-blue", iconBg: "icon-circle-blue" },
-  { bar: "card-accent-bar-green", iconBg: "icon-circle-green" },
-  { bar: "card-accent-bar-teal", iconBg: "icon-circle-sky" },
+const ICONS = [Heart, Droplets, GraduationCap, Flame, HandHeart];
+
+const CARD_PHOTOS = [
+  { src: "/images/food-bank.jpg",           alt: "Community food bank and meal program" },
+  { src: "/images/education-children.jpeg",  alt: "Youth education and literacy program" },
+  { src: "/images/volunteers-community.jpeg", alt: "Community support volunteers" },
+  { src: "/images/food-bank.jpg",         alt: "Senior care and support" },
+  { src: "/images/donation-giving.jpeg",      alt: "Charitable giving program" },
 ];
 
 export function ProgramCards({ title, intro, cards }: ProgramCardsProps) {
   return (
-    <section className="section-tone-neutral space-y-6 rounded-3xl border border-slate-200 p-6 md:p-8">
-      <div className="space-y-2">
-        <h2>{title}</h2>
-        <p className="max-w-3xl text-slate-600">{intro}</p>
-      </div>
-      <div className="grid gap-5 md:grid-cols-3">
-        {cards.map((card, i) => {
-          const accent = CARD_ACCENTS[i % CARD_ACCENTS.length];
-          return (
-            <article
-              key={card.title}
-              className="surface-card flex flex-col overflow-hidden"
-            >
-              {/* Accent top bar */}
-              <div className={`card-accent-bar ${accent.bar}`} aria-hidden="true" />
-              <div className="flex flex-1 flex-col p-7">
-                {/* Icon Circle (Empty) */}
-                <span className={`icon-circle ${accent.iconBg} mb-4`} aria-hidden="true" />
-                <h3 className="leading-snug">{card.title}</h3>
-                <p className="mt-2 flex-1 text-sm text-slate-600">{card.excerpt}</p>
-                <p className="mt-3 text-xs text-slate-500 italic">{card.complianceNote}</p>
-                <Link
-                  href={card.href}
-                  className="btn-tertiary mt-4 inline-flex items-center gap-1 group"
-                >
-                  Learn more
-                  <svg
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                    className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
-                    aria-hidden="true"
-                  >
-                    <path fillRule="evenodd" d="M2 8a.75.75 0 01.75-.75h8.69L8.22 4.03a.75.75 0 011.06-1.06l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06l3.22-3.22H2.75A.75.75 0 012 8z" clipRule="evenodd" />
-                  </svg>
-                </Link>
-              </div>
-            </article>
-          );
-        })}
+    <section className="section-padding px-4">
+      <div className="max-w-7xl mx-auto space-y-16">
+        <div className="grid lg:grid-cols-2 gap-12 items-end">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="space-y-6"
+          >
+            <h2 className="text-brand-navy max-w-xl">{title}</h2>
+            <div className="w-24 h-2 bg-brand-teal rounded-full" />
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-xl text-slate-500 max-w-2xl lg:pb-2"
+          >
+            {intro}
+          </motion.p>
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {cards.map((card, i) => {
+            const Icon = ICONS[i % ICONS.length];
+            const photo = CARD_PHOTOS[i % CARD_PHOTOS.length];
+            return (
+              <motion.article
+                key={card.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                className="group relative h-full flex flex-col rounded-[2.5rem] bg-white border border-slate-100 hover:border-brand-teal transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden"
+              >
+                {/* Photo */}
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{ background: "linear-gradient(180deg, transparent 30%, rgba(6,40,64,0.6) 100%)" }}
+                  />
+                  {/* Icon badge */}
+                  <div className="absolute bottom-4 left-6">
+                    <div className="h-11 w-11 rounded-2xl flex items-center justify-center bg-brand-navy text-white group-hover:bg-brand-teal transition-colors duration-500 shadow-xl">
+                      <Icon size={22} aria-hidden="true" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative flex flex-col flex-1 p-7 space-y-4">
+                  <h3 className="text-xl font-bold text-brand-navy group-hover:text-brand-teal transition-colors">
+                    {card.title}
+                  </h3>
+                  <p className="text-slate-500 leading-relaxed flex-1">
+                    {card.excerpt}
+                  </p>
+
+                  <div className="pt-4 mt-auto border-t border-slate-50 space-y-4">
+                    <div className="flex items-center gap-2 w-fit">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-teal animate-pulse" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Compliance Verified</span>
+                    </div>
+                    <Link
+                      href={card.href}
+                      className="group/link flex items-center gap-3 text-brand-navy font-bold hover:text-brand-teal transition-colors"
+                    >
+                      <span>View Impact</span>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 group-hover/link:bg-brand-teal group-hover/link:text-white transition-all">
+                        <ArrowRight size={16} aria-hidden="true" className="group-hover/link:translate-x-0.5 transition-transform" />
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

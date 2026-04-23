@@ -1,306 +1,399 @@
 @import "tailwindcss";
 
+/* ─── Design Tokens ──────────────────────────────────────────────────────── */
 :root {
   color-scheme: light;
-  --brand-primary: #0F172A;
-  /* Deep Navy to match UK header/footer */
-  --brand-primary-dark: #020617;
-  --brand-accent: #19AFAF;
-  /* FGRF UK Teal */
-  --brand-accent-soft: #E0F7FA;
-  --surface-neutral: #f8fafc;
-  --surface-soft-blue: #f0f9ff;
-  --text-strong: #0f172a;
-  --text-body: #334155;
-  --text-muted: #64748b;
-  --radius-button: 0.5rem;
-  /* Slightly sharper like UK */
-  --radius-card: 1rem;
-  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
-  --shadow-sm: 0 4px 6px -1px rgba(15, 23, 42, 0.08);
-  --shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.10);
-  --shadow-glow-blue: 0 4px 14px rgba(15, 23, 42, 0.20);
-  --shadow-glow-green: 0 4px 14px rgba(25, 175, 175, 0.25);
-  --motion-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --motion-med: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Brand */
+  --brand-primary:      #0e507b;
+  --brand-accent:       #19AFAF;
+  --brand-accent-glow:  rgba(25, 175, 175, 0.4);
+  --brand-accent-soft:  #F0FDFA;
+  --surface-cream:      #FCFAF7;
+
+  /* Text */
+  --text-strong: #1a2e3d;
+  --text-body:   #4b5563;
+  --text-muted:  #94A3B8;
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 3rem;
+
+  /* Shadows */
+  --shadow-xs:      0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm:      0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:      0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  --shadow-lg:      0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 25px 50px -12px rgba(0, 0, 0, 0.06);
+  --shadow-premium: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+  --shadow-glass:   0 8px 32px 0 rgba(14, 80, 123, 0.1);
+  --shadow-teal:    0 0 40px rgba(25, 175, 175, 0.25);
 }
 
+/* ─── Tailwind Theme Extension ───────────────────────────────────────────── */
 @theme inline {
-  --font-sans: "Inter", "Roboto", system-ui, sans-serif;
-  /* Matched UK simple sans */
-  --font-display: "Montserrat", "Inter", sans-serif;
-  /* UK headings look geometric */
-  --color-fgrf-teal: #19AFAF;
-  --color-fgrf-navy: #0F172A;
+  --font-sans:    var(--font-open-sans), "Open Sans", system-ui, sans-serif;
+  --font-display: var(--font-merriweather), "Merriweather", Georgia, serif;
+  --color-brand-navy: #0e507b;
+  --color-brand-teal: #19AFAF;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: white;
-  color: var(--text-strong);
+  background: linear-gradient(170deg, #ffffff 0%, #f5f9fc 40%, #eef4f9 75%, #f7fafd 100%);
+  background-attachment: fixed;
+  color: var(--text-body);
   font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1 {
-  font-size: clamp(2.25rem, 1.8rem + 2vw, 4rem);
-  line-height: 1.1;
-  font-weight: 700;
-  /* Slightly less heavy than 800 */
-  letter-spacing: -0.02em;
+/* ─── Typography (in @layer base so Tailwind utilities can override) ──────── */
+@layer base {
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--text-strong);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
+  }
+
+  h2 {
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    line-height: 1.08;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    line-height: 1.3;
+  }
+
+  p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+}
+
+.font-display {
   font-family: var(--font-display);
 }
 
-h2 {
-  font-size: clamp(1.75rem, 1.4rem + 1vw, 2.5rem);
-  line-height: 1.2;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  font-family: var(--font-display);
-  color: var(--brand-primary);
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: #f1f5f9; }
+::-webkit-scrollbar-thumb  { background: var(--brand-accent); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #0f8f8f; }
+
+/* ─── Layout Utilities ───────────────────────────────────────────────────── */
+.section-padding {
+  @apply py-24 sm:py-32;
 }
 
-h3 {
-  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.75rem);
-  line-height: 1.3;
-  font-weight: 600;
-  font-family: var(--font-display);
+/* ─── Glass Morphism ─────────────────────────────────────────────────────── */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: var(--shadow-glass);
 }
 
-p {
-  font-size: 1.05rem;
-  /* Slightly larger body text like UK */
-  line-height: 1.7;
-  color: var(--text-body);
-  max-width: 70ch;
+/* ─── Gradient Text ──────────────────────────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-ul,
-ol {
-  color: var(--text-body);
-  line-height: 1.7;
+.text-gradient-teal {
+  background: linear-gradient(135deg, #19AFAF 0%, #0d8f8f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-li+li {
-  margin-top: 0.4rem;
-}
-
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px white, 0 0 0 6px var(--brand-accent);
-  border-radius: 0.25rem;
-}
-
-/* ── Section shells ───────────────────────────────────── */
-.section-shell {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-}
-
-.section-tone-white {
-  background: #ffffff;
-}
-
-.section-tone-neutral {
-  background: var(--surface-neutral);
-}
-
-.section-tone-blue {
-  background: var(--surface-soft-blue);
-}
-
-/* ── Surface cards ────────────────────────────────────── */
-.surface-card {
-  border: 1px solid #e2e8f0;
-  border-radius: var(--radius-card);
-  background: #ffffff;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--motion-fast);
-}
-
-.surface-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--brand-accent);
-}
-
-.surface-card:active {
-  transform: translateY(-1px);
-}
-
-/* ── Buttons ──────────────────────────────────────────── */
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
 .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-  border-radius: 4px;
-  /* Boxier buttons like UK site */
-  padding: 0.875rem 2rem;
-  border: none;
-  background: var(--brand-accent);
-  /* Solid Teal */
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  transition: all var(--motion-fast);
+  @apply relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-500 rounded-full overflow-hidden select-none;
+  background: var(--brand-primary);
+  letter-spacing: 0.01em;
 }
 
 .btn-primary:hover {
-  background: #138f8f;
-  /* Darker teal */
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(25, 175, 175, 0.4);
+  @apply -translate-y-0.5;
+  background: var(--brand-accent);
+  box-shadow: 0 20px 40px rgba(25, 175, 175, 0.35);
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  @apply translate-y-0;
 }
 
+.btn-primary::after {
+  content: '';
+  @apply absolute inset-0 bg-white/15 translate-y-full transition-transform duration-500 ease-out;
+}
+
+.btn-primary:hover::after {
+  @apply translate-y-0;
+}
+
+/* Secondary / ghost button */
+.btn-outline {
+  @apply relative inline-flex items-center justify-center px-8 py-3.5 font-bold rounded-full border-2 transition-all duration-300 overflow-hidden;
+  border-color: var(--brand-accent);
+  color: var(--brand-accent);
+}
+
+.btn-outline:hover {
+  background: var(--brand-accent);
+  color: white;
+  @apply -translate-y-0.5 shadow-lg;
+  box-shadow: 0 12px 24px rgba(25, 175, 175, 0.3);
+}
+
+/* ─── Video Overlay ──────────────────────────────────────────────────────── */
+.video-overlay {
+  @apply absolute inset-0 z-10;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 40, 64, 0.65) 0%,
+    rgba(14, 80, 123, 0.20) 40%,
+    rgba(6, 40, 64, 0.82) 100%
+  );
+}
+
+/* ─── Surface Cards ──────────────────────────────────────────────────────── */
+.surface-card {
+  @apply bg-white rounded-2xl border border-slate-100;
+  box-shadow: var(--shadow-sm);
+}
+
+.surface-card-hover {
+  @apply bg-white rounded-2xl border border-slate-100 transition-all duration-300;
+  box-shadow: var(--shadow-sm);
+}
+
+.surface-card-hover:hover {
+  @apply border-slate-200 -translate-y-1;
+  box-shadow: var(--shadow-lg);
+}
+
+/* ─── Section Shell (used by Section.tsx) ────────────────────────────────── */
+.section-shell {
+  @apply rounded-3xl border overflow-hidden;
+}
+
+.section-tone-white {
+  background: white;
+  border-color: rgba(25, 175, 175, 0.1);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+}
+
+.section-tone-neutral {
+  background: linear-gradient(160deg, #f8fafc 0%, #f0fafa 100%);
+  border-color: rgba(25, 175, 175, 0.14);
+}
+
+.section-tone-blue {
+  background: linear-gradient(160deg, #f0f7ff 0%, #f5fafa 100%);
+  border-color: rgba(99, 102, 241, 0.12);
+}
+
+/* ─── Card Accent Bars ───────────────────────────────────────────────────── */
+.card-accent-bar {
+  height: 3px;
+  width: 100%;
+}
+
+.card-accent-bar-blue  { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.card-accent-bar-green { background: linear-gradient(90deg, #10b981, #34d399); }
+.card-accent-bar-teal  { background: linear-gradient(90deg, #19AFAF, #4dd9d9); }
+.card-accent-bar-amber { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
+
+/* ─── Secondary / Tertiary Buttons ──────────────────────────────────────── */
 .btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-  border-radius: 4px;
-  padding: 0.875rem 2rem;
-  border: 2px solid var(--brand-primary);
-  background: transparent;
-  color: var(--brand-primary);
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  transition: all var(--motion-fast);
+  @apply inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold rounded-full border transition-all duration-200;
+  border-color: rgba(25, 175, 175, 0.35);
+  color: #19AFAF;
+  background: rgba(25, 175, 175, 0.05);
 }
 
 .btn-secondary:hover {
-  background: var(--brand-primary);
-  color: white;
-  transform: translateY(-1px);
-}
-
-.btn-secondary:active {
-  transform: translateY(0);
+  background: rgba(25, 175, 175, 0.12);
+  border-color: rgba(25, 175, 175, 0.6);
+  @apply -translate-y-px;
 }
 
 .btn-tertiary {
-  color: var(--brand-accent);
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  transition: border-color var(--motion-fast);
+  @apply inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200;
+  color: #475569;
 }
 
 .btn-tertiary:hover {
-  color: #138f8f;
-  border-bottom-color: #138f8f;
+  color: #19AFAF;
 }
 
-/* ── Badge / pill ─────────────────────────────────────── */
-.badge-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  border-radius: 9999px;
-  padding: 0.4rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+/* ─── Form Inputs ────────────────────────────────────────────────────────── */
+.form-input {
+  @apply w-full rounded-xl border bg-white px-4 py-3 text-slate-900 text-sm transition-all duration-200;
+  border-color: #e2e8f0;
+  outline: none;
 }
 
-.badge-pill-blue {
-  background: #eff6ff;
-  color: var(--brand-primary);
-  border: 1px solid #dbeafe;
+.form-input:focus {
+  border-color: #19AFAF;
+  box-shadow: 0 0 0 3px rgba(25, 175, 175, 0.12);
 }
 
-.badge-pill-green {
-  background: #f0fdf4;
-  color: var(--brand-accent);
-  border: 1px solid #dcfce7;
+.form-input::placeholder {
+  color: #94a3b8;
 }
 
-/* ── Icon circle ──────────────────────────────────────── */
+/* ─── Icon Circles ───────────────────────────────────────────────────────── */
 .icon-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  font-size: 1.25rem;
-  flex-shrink: 0;
-  background: var(--surface-soft-blue);
+  @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full;
+  position: relative;
+}
+
+.icon-circle::after {
+  content: '';
+  @apply block h-3 w-3 rounded-full;
+}
+
+.icon-circle-blue   { @apply bg-blue-100; }
+.icon-circle-blue::after   { @apply bg-blue-600; }
+
+.icon-circle-green  { @apply bg-emerald-100; }
+.icon-circle-green::after  { @apply bg-emerald-600; }
+
+.icon-circle-sky    { @apply bg-sky-100; }
+.icon-circle-sky::after    { @apply bg-sky-500; }
+
+.icon-circle-amber  { @apply bg-amber-100; }
+.icon-circle-amber::after  { @apply bg-amber-500; }
+
+.icon-circle-teal   { @apply bg-teal-100; }
+.icon-circle-teal::after   { @apply bg-teal-600; }
+
+/* ─── Eyebrow Labels ─────────────────────────────────────────────────────── */
+.eyebrow {
+  @apply inline-block text-xs font-bold uppercase tracking-[0.25em];
   color: var(--brand-accent);
 }
 
-.icon-circle-blue {
-  background: #eff6ff;
-  color: var(--brand-primary);
-}
-
-.icon-circle-green {
-  background: #e0faff;
+.eyebrow-pill {
+  @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] border;
+  border-color: rgba(25, 175, 175, 0.25);
+  background: rgba(25, 175, 175, 0.08);
   color: var(--brand-accent);
 }
 
-.icon-circle-sky {
-  background: #f0f9ff;
-  color: #0ea5e9;
-}
-
-.icon-circle-amber {
-  background: #fffbeb;
-  color: #d97706;
-}
-
-.icon-circle-rose {
-  background: #fff1f2;
-  color: #e11d48;
-}
-
-/* ── Stat number ──────────────────────────────────────── */
-.stat-number {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 2rem + 2vw, 4rem);
-  font-weight: 700;
-  line-height: 1;
-  color: var(--brand-accent);
-}
-
-/* ── Accent card bar ──────────────────────────────────── */
-.card-accent-bar {
-  height: 5px;
-  border-radius: var(--radius-card) var(--radius-card) 0 0;
-  margin: -1px -1px 0;
-}
-
-.card-accent-bar-blue {
-  background: var(--brand-primary);
-}
-
-.card-accent-bar-green {
+/* ─── Decorative Elements ────────────────────────────────────────────────── */
+.divider-teal {
+  @apply w-16 h-1 rounded-full;
   background: var(--brand-accent);
 }
 
-.card-accent-bar-teal {
-  background: var(--brand-accent);
+/* ─── Section Gradient Backgrounds ──────────────────────────────────────── */
+.section-gradient-light {
+  background: linear-gradient(160deg, #ffffff 0%, #f0fafa 45%, #f8fcff 100%);
 }
 
-/* ── Summary detail ───────────────────────────────────── */
-summary {
-  transition: color var(--motion-fast);
-  cursor: pointer;
+.section-gradient-teal {
+  background: linear-gradient(180deg, #f5fafa 0%, #eef6f6 50%, #f0f4ff 100%);
 }
 
-summary:hover {
-  color: var(--brand-primary);
+.section-gradient-blue {
+  background: linear-gradient(160deg, #fafcff 0%, #f0f4ff 50%, #f5fafa 100%);
+}
+
+/* Mesh gradient — bold decorative background for premium sections */
+.section-gradient-mesh {
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 30%, rgba(25,175,175,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 70%, rgba(59,130,246,0.06) 0%, transparent 60%),
+    linear-gradient(160deg, #fafcff 0%, #f7fbfb 100%);
+}
+
+/* Dot grid background */
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(10,15,29,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Noise texture overlay */
+.noise-overlay::before {
+  content: '';
+  @apply absolute inset-0 opacity-[0.025] pointer-events-none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.8; }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-150%); }
+  100% { transform: translateX(150%); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up    { animation: fade-up 0.6s ease-out forwards; }
+.animate-fade-in    { animation: fade-in 0.5s ease-out forwards; }
+.animate-float      { animation: float 4s ease-in-out infinite; }
+.animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-slide-down { animation: slide-down 0.25s ease-out forwards; }
+
+/* ─── Footer Social Links ───────────────────────────────────────────────── */
+.footer-social-link {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+}
+
+.footer-social-link:hover {
+  background: rgba(25, 175, 175, 0.15);
+  border-color: rgba(25, 175, 175, 0.3);
+  color: #19AFAF;
+}
+
+/* ─── Focus Visible (Global) ─────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--brand-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }

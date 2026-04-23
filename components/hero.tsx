@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 
 type HeroProps = {
@@ -83,7 +83,7 @@ export function Hero({
               className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-8 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
             >
               {secondaryCta.label}
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true">{">"}</span>
             </Link>
           </div>
 
